@@ -7,7 +7,7 @@ return [
         ],
         'tests' => [
             'task' => new \Konstruu\Task\ExecutableTask(
-                './vendor/bin/phpunit --configuration=tests/phpunit.xml'
+                './vendor/bin/phpunit --configuration=phpunit.xml'
             ),
             'dependencies' => [
                 'composer',
