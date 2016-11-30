@@ -1,0 +1,4 @@
+vendor/
+cache/
+.idea/
+code-coverage-report/

@@ -1,0 +1,18 @@
+<phpunit>
+    <testsuites>
+        <testsuite name="unit">
+            <directory>unit</directory>
+        </testsuite>
+        <testsuite name="integration">
+            <directory>integration</directory>
+        </testsuite>
+    </testsuites>
+    <logging>
+        <log type="coverage-html" target="../code-coverage-report" />
+    </logging>
+    <filter>
+        <whitelist processUncoveredFilesFromWhitelist="true">
+            <directory suffix=".php">../src/Konstruu</directory>
+        </whitelist>
+    </filter>
+</phpunit>
