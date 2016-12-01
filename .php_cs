@@ -10,8 +10,8 @@ $finder = Symfony\CS\Finder::create()
     ->append(
         Symfony\CS\Finder::create()->append(
             [
-                __DIR__ . '/bin/konstruu',
-                __DIR__ . '/.konstruu.php',
+                __DIR__ . '/bin/konstrui',
+                __DIR__ . '/.konstrui.php',
                 __FILE__,
             ]
         )

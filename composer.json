@@ -1,12 +1,12 @@
 {
-  "name": "shazarre/konstruu",
+  "name": "shazarre/konstrui",
   "description": "A build system in PHP.",
   "autoload": {
     "psr-4": {
-      "Konstruu\\": "src/Konstruu/"
+      "Konstrui\\": "src/Konstrui/"
     }
   },
-  "bin": ["bin/konstruu"],
+  "bin": ["bin/konstrui"],
   "require": {
     "monolog/monolog": "^1.21",
     "php": "^5.5 || ^7.0"

@@ -12,7 +12,7 @@
     </logging>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
-            <directory suffix=".php">src/Konstruu</directory>
+            <directory suffix=".php">src/Konstrui</directory>
         </whitelist>
     </filter>
 </phpunit>
