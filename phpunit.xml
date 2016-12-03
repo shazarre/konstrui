@@ -9,6 +9,7 @@
     </testsuites>
     <logging>
         <log type="coverage-html" target="code-coverage-report" />
+        <log type="coverage-clover" target="clover.xml" />
     </logging>
     <filter>
         <whitelist processUncoveredFilesFromWhitelist="true">
