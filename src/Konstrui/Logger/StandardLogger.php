@@ -8,14 +8,15 @@ class StandardLogger implements LoggerInterface
     const LOG_LEVEL_NAME_INFO = 'INFO';
     const LOG_LEVEL_NAME_WARNING = 'WARNING';
     const LOG_LEVEL_NAME_ERROR = 'ERROR';
+
     /**
      * @var string
      */
     protected $prefix = '';
 
     /**
-     * @param $message
-     * @param int $level
+     * @param string $message
+     * @param int    $level
      */
     public function log($message, $level = self::LEVEL_INFO)
     {
@@ -28,7 +29,7 @@ class StandardLogger implements LoggerInterface
     }
 
     /**
-     * @param $prefix
+     * @param string $prefix
      */
     public function setPrefix($prefix)
     {
@@ -36,9 +37,9 @@ class StandardLogger implements LoggerInterface
     }
 
     /**
-     * @param $level
+     * @param int $level
      *
-     * @return mixed
+     * @return string
      */
     protected function mapLevelToReadableName($level)
     {

@@ -13,5 +13,14 @@ return [
                 'composer',
             ],
         ],
+        'cleanup' => [
+            'task' => new \Konstrui\Task\CleanTask(
+                [
+                    __DIR__ . '/code-coverage-report',
+                    __DIR__ . '/cache',
+                    __DIR__ . '/clover.xml',
+                ]
+            ),
+        ],
     ],
 ];
