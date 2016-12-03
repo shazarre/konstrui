@@ -7,32 +7,46 @@ if (empty($argv[1])) {
     exit(1);
 }
 
-$autoloadLookupPaths = [
-    __DIR__ . '/vendor/autoload.php',
-    __DIR__ . '/../vendor/autoload.php',
-    __DIR__ . '/../../vendor/autoload.php',
-];
+/**
+ * Inits autoload. In case composer autoload is not found, will be able
+ * to load Konstrui\ classes on its own.
+ */
+function init_autoload()
+{
+    $autoloadLookupPaths = [
+        __DIR__ . '/vendor/autoload.php',
+        __DIR__ . '/../vendor/autoload.php',
+        __DIR__ . '/../../vendor/autoload.php',
+    ];
 
-foreach ($autoloadLookupPaths as $path) {
-    if (file_exists($path)) {
-        require $path;
+    foreach ($autoloadLookupPaths as $path) {
+        if (file_exists($path)) {
+            require $path;
 
-        break;
+            return;
+        }
     }
+
+    spl_autoload_register(function ($className) {
+        $className = ltrim($className, '\\');
+        $path = __DIR__ . '/../src/' . str_replace(
+            '\\',
+            DIRECTORY_SEPARATOR,
+            $className
+        ) . '.php';
+
+        require $path;
+    });
 }
 
-if (file_exists(\Konstrui\Definition\Provider\PhpProvider::PHP_BUILD_FILE)) {
-    $monolog = new Monolog\Logger('output');
-    $handler = new Monolog\Handler\StreamHandler('php://stdout');
-    $handler->setFormatter(new \Monolog\Formatter\LineFormatter(null, null, false, true));
-    $monolog->setHandlers([$handler]);
-    $logger = new \Konstrui\Logger\MonologLoggerAdapter($monolog);
+init_autoload();
 
+if (file_exists(\Konstrui\Definition\Provider\PhpProvider::PHP_BUILD_FILE)) {
     $phpProvider = new \Konstrui\Definition\Provider\PhpProvider(
         require \Konstrui\Definition\Provider\PhpProvider::PHP_BUILD_FILE
     );
     $resolver = new \Konstrui\Resolver\Resolver($phpProvider->provideDefinition());
-    $runner = new \Konstrui\Runner\Runner($resolver, $logger);
+    $runner = new \Konstrui\Runner\Runner($resolver, new \Konstrui\Logger\StandardLogger());
 
     $runner->run(new \Konstrui\Task\TaskAlias($argv[1]));
 } else {
