@@ -41,4 +41,21 @@ interface DefinitionInterface
      * @return array
      */
     public function getAliases();
+
+    /**
+     * Sets a description for given task.
+     *
+     * @param TaskAlias $alias
+     * @param string    $description
+     */
+    public function setDescription(TaskAlias $alias, $description);
+
+    /**
+     * Gets a description for given task.
+     *
+     * @param TaskAlias $alias
+     *
+     * @return string
+     */
+    public function getDescription(TaskAlias $alias);
 }

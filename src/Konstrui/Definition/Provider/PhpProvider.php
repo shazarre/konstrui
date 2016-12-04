@@ -68,6 +68,10 @@ class PhpProvider implements ProviderInterface
                         $definition->addDependency(new TaskAlias($alias), new TaskAlias($dependency));
                     }
                 }
+
+                if (array_key_exists('description', $schema)) {
+                    $definition->setDescription(new TaskAlias($alias), $schema['description']);
+                }
             }
         }
 

@@ -4,6 +4,7 @@ return [
     'tasks' => [
         'composer' => [
             'task' => new \Konstrui\Task\ExecutableTask('composer install'),
+            'description' => 'Installs all composer dependencies.',
         ],
         'tests' => [
             'task' => new \Konstrui\Task\ExecutableTask(
@@ -12,6 +13,7 @@ return [
             'dependencies' => [
                 'composer',
             ],
+            'description' => 'Runs unit and integration tests.',
         ],
         'cleanup' => [
             'task' => new \Konstrui\Task\CleanTask(
@@ -21,6 +23,7 @@ return [
                     __DIR__ . '/clover.xml',
                 ]
             ),
+            'description' => 'Performs a cleanup after running tests.',
         ],
     ],
 ];

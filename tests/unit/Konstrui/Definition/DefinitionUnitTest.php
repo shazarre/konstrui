@@ -87,6 +87,24 @@ class DefinitionUnitTest extends \PHPUnit_Framework_TestCase
     /**
      * @expectedException \Konstrui\Exception\TaskNotFoundException
      */
+    public function testThrowsExceptionWhenAddingDescriptionForNonExistingTask()
+    {
+        $definition = new Definition();
+        $definition->setDescription(new TaskAlias('alias'), 'Test description');
+    }
+
+    /**
+     * @expectedException \Konstrui\Exception\TaskNotFoundException
+     */
+    public function testThrowsExceptionWhenGettingDescriptionForNonExistingTask()
+    {
+        $definition = new Definition();
+        $definition->getDescription(new TaskAlias('alias'));
+    }
+
+    /**
+     * @expectedException \Konstrui\Exception\TaskNotFoundException
+     */
     public function testThrowsExceptionWhenAddingNonExistingDependencies()
     {
         $task = $this->getMockForAbstractClass(TaskInterface::class);
@@ -147,5 +165,14 @@ class DefinitionUnitTest extends \PHPUnit_Framework_TestCase
             ],
             $definition->getAliases()
         );
+    }
+
+    public function testSetAndGetDescription()
+    {
+        $definition = new Definition();
+        $alias = new TaskAlias('alias');
+        $definition->addTask($alias, $this->getMockForAbstractClass(TaskInterface::class));
+        $definition->setDescription($alias, 'Test description');
+        $this->assertEquals('Test description', $definition->getDescription($alias));
     }
 }
