@@ -1,12 +1,6 @@
 #!/usr/bin/env php
 <?php
 
-if (empty($argv[1])) {
-    echo 'You need to specify build target.' . PHP_EOL;
-
-    exit(1);
-}
-
 /**
  * Inits autoload. In case composer autoload is not found, will be able
  * to load Konstrui\ classes on its own.
@@ -45,10 +39,16 @@ if (file_exists(\Konstrui\Definition\Provider\PhpProvider::PHP_BUILD_FILE)) {
     $phpProvider = new \Konstrui\Definition\Provider\PhpProvider(
         require \Konstrui\Definition\Provider\PhpProvider::PHP_BUILD_FILE
     );
-    $resolver = new \Konstrui\Resolver\Resolver($phpProvider->provideDefinition());
-    $runner = new \Konstrui\Runner\Runner($resolver, new \Konstrui\Logger\StandardLogger());
-
-    $runner->run(new \Konstrui\Task\TaskAlias($argv[1]));
+    $definition = $phpProvider->provideDefinition();
+    $resolver = new \Konstrui\Resolver\Resolver($definition);
+    $router = new \Konstrui\Cli\Router(
+        new \Konstrui\Runner\Runner($resolver, new \Konstrui\Logger\StandardLogger()),
+        new \Konstrui\Cli\Command\CommandFactory(
+            $definition,
+            $argv[0]
+        )
+    );
+    $router->route($argv);
 } else {
     echo 'No build file found.' . PHP_EOL;
 
