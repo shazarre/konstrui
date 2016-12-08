@@ -51,11 +51,9 @@ class MonologLoggerAdapter implements LoggerInterface
         ];
 
         if (array_key_exists($level, $map)) {
-            $level = $map[$level];
-        } else {
-            $level = Logger::INFO;
+            return $map[$level];
         }
 
-        return $level;
+        return Logger::INFO;
     }
 }

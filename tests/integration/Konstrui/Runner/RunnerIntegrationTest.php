@@ -87,8 +87,8 @@ class RunnerIntegrationTest extends \PHPUnit_Framework_TestCase
     public function testStopsExecutionOnDependencyTaskExecutionException()
     {
         $definition = new Definition();
-        $taskThrowingAnException = $this->getMockForAbstractClass(TaskInterface::class);
-        $taskThrowingAnException->expects($this->once())
+        $taskWithException = $this->getMockForAbstractClass(TaskInterface::class);
+        $taskWithException->expects($this->once())
             ->method('perform')
             ->willReturnCallback(function () {
                 throw new TaskExecutionException();
@@ -109,7 +109,7 @@ class RunnerIntegrationTest extends \PHPUnit_Framework_TestCase
         );
         $definition->addTask(
             new TaskAlias('d'),
-            $taskThrowingAnException
+            $taskWithException
         );
 
         $definition->addDependency(new TaskAlias('a'), new TaskAlias('b'));
@@ -125,13 +125,13 @@ class RunnerIntegrationTest extends \PHPUnit_Framework_TestCase
     public function testStopsExecutionOnTaskExecutionException()
     {
         $definition = new Definition();
-        $taskThrowingAnException = $this->getMockForAbstractClass(TaskInterface::class);
-        $taskThrowingAnException->expects($this->once())
+        $taskWithException = $this->getMockForAbstractClass(TaskInterface::class);
+        $taskWithException->expects($this->once())
             ->method('perform')
             ->willReturnCallback(function () {
                 throw new TaskExecutionException();
             });
-        $definition->addTask(new TaskAlias('a'), $taskThrowingAnException);
+        $definition->addTask(new TaskAlias('a'), $taskWithException);
         $runner = new Runner(
             new Resolver($definition),
             $this->getMockForAbstractClass(LoggerInterface::class)

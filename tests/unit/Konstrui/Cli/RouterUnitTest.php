@@ -63,7 +63,6 @@ class RouterUnitTest extends \PHPUnit_Framework_TestCase
 
     public function testRoutesTask()
     {
-        $command = $this->getMockForAbstractClass(CommandInterface::class);
         $runner = $this->getMockForAbstractClass(RunnerInterface::class);
 
         $router = new Router(
@@ -76,7 +75,7 @@ class RouterUnitTest extends \PHPUnit_Framework_TestCase
             ->with(new TaskAlias('task'));
 
         $router->route(
-            $cliArguments = [
+            [
                 './bin/konstrui',
                 'task',
             ]

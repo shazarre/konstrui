@@ -55,6 +55,13 @@ class Definition implements DefinitionInterface
             throw new TaskNotFoundException($dependencyAsString);
         }
 
+        /*
+         * TODO
+         *
+         * Of course this way of checking is not the best and probably would fail
+         * with more complicated cases. Ideally it should be solved by implementing
+         * topological sorting, dependencies should be stored as a graph.
+         */
         if (in_array($alias, $this->flattenAllDependencies($dependency))) {
             throw new CircularDependencyException();
         }

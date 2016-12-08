@@ -7,11 +7,11 @@ use Konstrui\Definition\DefinitionInterface;
 class CommandFactoryUnitTest extends \PHPUnit_Framework_TestCase
 {
     /**
-     * @param string $expectedCommandClassName
+     * @param string $expectedClassName
      * @param string $name
      * @dataProvider dataCreateCommandByName
      */
-    public function testCreateCommandByName($expectedCommandClassName, $name)
+    public function testCreateCommandByName($expectedClassName, $name)
     {
         $factory = new CommandFactory(
             $this->getMockForAbstractClass(DefinitionInterface::class),
@@ -19,7 +19,7 @@ class CommandFactoryUnitTest extends \PHPUnit_Framework_TestCase
         );
 
         $this->assertInstanceOf(
-            $expectedCommandClassName,
+            $expectedClassName,
             $factory->createCommandByName($name)
         );
     }
