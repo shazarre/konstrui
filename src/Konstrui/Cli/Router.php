@@ -43,6 +43,8 @@ class Router implements RouterInterface
                     return $this->runCommand('help');
                 case '--list':
                     return $this->runCommand('list');
+                case '--version':
+                    return $this->runCommand('version');
                 default:
                     return $this->runTask($arguments[0]);
             }

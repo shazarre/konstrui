@@ -58,6 +58,10 @@ class RouterUnitTest extends \PHPUnit_Framework_TestCase
             [
                 'help',
             ],
+            [
+                'version',
+                '--version',
+            ],
         ];
     }
 

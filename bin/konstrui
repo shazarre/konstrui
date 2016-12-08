@@ -13,7 +13,8 @@ if (file_exists(\Konstrui\Definition\Provider\PhpProvider::PHP_BUILD_FILE)) {
         new \Konstrui\Runner\Runner($resolver, new \Konstrui\Logger\StandardLogger()),
         new \Konstrui\Cli\Command\CommandFactory(
             $definition,
-            $argv[0]
+            $argv[0],
+            new \Konstrui\Version()
         )
     );
     $router->route($argv);

@@ -3,6 +3,7 @@
 namespace Konstrui\Cli\Command;
 
 use Konstrui\Definition\DefinitionInterface;
+use Konstrui\Version;
 
 class CommandFactoryUnitTest extends \PHPUnit_Framework_TestCase
 {
@@ -15,7 +16,8 @@ class CommandFactoryUnitTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new CommandFactory(
             $this->getMockForAbstractClass(DefinitionInterface::class),
-            'konstrui'
+            'konstrui',
+            new Version()
         );
 
         $this->assertInstanceOf(
@@ -38,6 +40,10 @@ class CommandFactoryUnitTest extends \PHPUnit_Framework_TestCase
                 ListCommand::class,
                 'list',
             ],
+            [
+                VersionCommand::class,
+                'version',
+            ],
         ];
     }
 
@@ -48,7 +54,8 @@ class CommandFactoryUnitTest extends \PHPUnit_Framework_TestCase
     {
         $factory = new CommandFactory(
             $this->getMockForAbstractClass(DefinitionInterface::class),
-            'konstrui'
+            'konstrui',
+            new Version()
         );
         $factory->createCommandByName('unknown');
     }
