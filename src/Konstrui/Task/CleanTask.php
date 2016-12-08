@@ -64,9 +64,9 @@ class CleanTask implements TaskInterface, LoggableInterface
         $this->log(sprintf('Removing path %s', $path));
         if (is_dir($path)) {
             return rmdir($path);
-        } else {
-            return unlink($path);
         }
+
+        return unlink($path);
     }
 
     /**

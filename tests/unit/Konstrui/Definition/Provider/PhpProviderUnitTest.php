@@ -42,13 +42,13 @@ class PhpProviderUnitTest extends \PHPUnit_Framework_TestCase
 
     /**
      * @param array    $schema
-     * @param callable $expectedDefinitionCallback
+     * @param callable $definitionCallback
      * @dataProvider dataProvideDefinition
      */
-    public function testProvideDefinition($schema, $expectedDefinitionCallback)
+    public function testProvideDefinition($schema, $definitionCallback)
     {
         $provider = new PhpProvider($schema);
-        $this->assertEquals($expectedDefinitionCallback(), $provider->provideDefinition());
+        $this->assertEquals($definitionCallback(), $provider->provideDefinition());
     }
 
     public function dataProvideDefinition()
@@ -74,6 +74,7 @@ class PhpProviderUnitTest extends \PHPUnit_Framework_TestCase
                     'tasks' => [
                         'alias' => [
                             'task' => $this->getMockForAbstractClass(TaskInterface::class),
+                            'description' => 'Test description',
                         ],
                         'another-alias' => [
                             'task' => $this->getMockForAbstractClass(TaskInterface::class),
@@ -88,6 +89,7 @@ class PhpProviderUnitTest extends \PHPUnit_Framework_TestCase
                     $definition->addTask(new TaskAlias('alias'), $this->getMockForAbstractClass(TaskInterface::class));
                     $definition->addTask(new TaskAlias('another-alias'), $this->getMockForAbstractClass(TaskInterface::class));
                     $definition->addDependency(new TaskAlias('another-alias'), new TaskAlias('alias'));
+                    $definition->setDescription(new TaskAlias('alias'), 'Test description');
 
                     return $definition;
                 },

@@ -40,18 +40,15 @@ class Router implements RouterInterface
         if (!empty($arguments)) {
             switch ($arguments[0]) {
                 case '--help':
-                    $this->runCommand('help');
-                    break;
+                    return $this->runCommand('help');
                 case '--list':
-                    $this->runCommand('list');
-                    break;
+                    return $this->runCommand('list');
                 default:
-                    $this->runTask($arguments[0]);
-                    break;
+                    return $this->runTask($arguments[0]);
             }
-        } else {
-            $this->runCommand('help');
         }
+
+        return $this->runCommand('help');
     }
 
     /**

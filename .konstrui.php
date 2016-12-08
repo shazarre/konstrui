@@ -3,15 +3,20 @@
 return [
     'tasks' => [
         'composer' => [
-            'task' => new \Konstrui\Task\ExecutableTask('composer install'),
-            'description' => 'Installs all composer dependencies.',
+            'task' => new \Konstrui\Task\ComposerTask(),
+            'description' => 'Installs non-development composer dependencies.',
+        ],
+        'composer-dev' => [
+            'task' => new \Konstrui\Task\ComposerTask(
+                \Konstrui\Task\ComposerTask::MODE_INSTALL,
+                true
+            ),
+            'description' => 'Installs all composer dependencies (including dev).',
         ],
         'tests' => [
-            'task' => new \Konstrui\Task\ExecutableTask(
-                './vendor/bin/phpunit --configuration=phpunit.xml'
-            ),
+            'task' => new \Konstrui\Task\PhpUnitTask(),
             'dependencies' => [
-                'composer',
+                'composer-dev',
             ],
             'description' => 'Runs unit and integration tests.',
         ],

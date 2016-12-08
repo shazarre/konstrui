@@ -10,6 +10,7 @@ $finder = Symfony\CS\Finder::create()
     ->append(
         Symfony\CS\Finder::create()->append(
             [
+                __DIR__ . '/autoload.php',
                 __DIR__ . '/bin/konstrui',
                 __DIR__ . '/.konstrui.php',
                 __FILE__,
