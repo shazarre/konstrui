@@ -32,9 +32,24 @@ there.
 
 ## Usage
 
-### Build file
+`./bin/konstrui <task|command> [arguments]`
 
-Your project needs to include a `.kontrui.php`. Below you can find an example
+### Commands
+
+Commands in Knstrui are prefixed with `--` and their list
+is predefined. Available commands are:
+
+| Command        | Description           |
+| ------------- | ------------- |
+| `--help` | Will print out help information. |
+| `--list` | Will print out list of all available tasks and related information (together with exact cli command to run which you can just copy paste into your terminal) |
+| `--version` | Will print out version information. |
+
+### Tasks
+
+#### Build file
+
+To use tasks, your project needs to include a `.kontrui.php`. Below you can find an example
 contents of such file.
 
 ```php
@@ -74,9 +89,9 @@ return [
 ];
 ```
 
-### Task types
+#### Task types
 
-#### CallableTask
+##### CallableTask
 
 This task is meant to run a specified callback (specifically speaking: anything 
 that is `callable`). If the callback returns `false` a `TaskExecutionException` 
@@ -99,7 +114,7 @@ new CallableTask(function () {
 })
 ```
 
-#### CleanTask
+##### CleanTask
 
 Will try to remove specified paths. Those which does not exist will be silently
 ommited, but if for any existing one removal will file (ie. for permission 
@@ -118,7 +133,7 @@ $cleanupTask = new CleanTask(
 );
 ```
 
-#### ExecutableTask
+##### ExecutableTask
 
 Will run specified command. If running the command will result in exit code
 greater than 0, it will throw `TaskExecutionException` and the build will stop.
@@ -129,7 +144,7 @@ greater than 0, it will throw `TaskExecutionException` and the build will stop.
 $executableTask = new ExecutableTask('ps aux');
 ```
 
-#### PhpUnitTask
+##### PhpUnitTask
 
 Performs PHPUnit tests. Supports:
 - custom configuration path
@@ -147,7 +162,7 @@ $task = new \Konstrui\Task\PhpUnitTask();
 
 ```
 
-#### ComposerTask
+##### ComposerTask
 
 Runs composer.
 
