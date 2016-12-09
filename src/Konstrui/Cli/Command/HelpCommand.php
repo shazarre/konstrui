@@ -33,6 +33,7 @@ Available commands are:
 
     --help - displays this help
     --list - displays list of all available tasks
+    --version - displays current Konstrui version
 
 EOS;
     }
