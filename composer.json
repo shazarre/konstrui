@@ -8,10 +8,10 @@
   },
   "bin": ["bin/konstrui"],
   "require": {
-    "monolog/monolog": "^1.21",
     "php": "^5.5 || ^7.0"
   },
   "require-dev": {
-    "phpunit/phpunit": "^4.8"
+    "phpunit/phpunit": "^4.8",
+    "monolog/monolog": "^1.21"
   }
 }

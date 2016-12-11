@@ -2,7 +2,7 @@
 
 namespace Konstrui\Task;
 
-use Konstrui\Exception\TaskCreateException;
+use Konstrui\Exception\TaskCreationException;
 
 /**
  * Runs composer.
@@ -11,7 +11,7 @@ use Konstrui\Exception\TaskCreateException;
  * - install
  * - update
  *
- * Specifying any other mode will throw a TaskCreateException.
+ * Specifying any other mode will throw a TaskCreationException.
  *
  * Supports also:
  * - including/excluding dev dependencies
@@ -39,7 +39,7 @@ class ComposerTask extends ExecutableTask
      * @param bool   $requireDev
      * @param string $composerPath
      *
-     * @throws TaskCreateException
+     * @throws TaskCreationException
      */
     public function __construct(
         $mode = self::MODE_INSTALL,
@@ -47,7 +47,7 @@ class ComposerTask extends ExecutableTask
         $composerPath = self::DEFAULT_PATH
     ) {
         if (!in_array($mode, [self::MODE_INSTALL, self::MODE_UPDATE])) {
-            throw new TaskCreateException('Invalid mode provided');
+            throw new TaskCreationException('Invalid mode provided');
         }
 
         parent::__construct(
