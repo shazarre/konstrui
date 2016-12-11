@@ -30,10 +30,15 @@ and it's all without any hassle in your own IDE.
 Of course, feel free to use it outside of PHP world, but it's mostly suited 
 there.
 
+## Installation
+
+### Composer
+
+    composer require "konstrui/konstrui" "dev-master"
+
 ## Usage
 
-`./bin/konstrui <task|command> [arguments]`
-
+`./vendor/bin/konstrui <task|command> [arguments]`
 ### Commands
 
 Commands in Knstrui are prefixed with `--` and their list
