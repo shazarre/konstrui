@@ -1,5 +1,7 @@
 <?php
 
+$version = new Konstrui\Version();
+
 return [
     'tasks' => [
         'composer' => [
@@ -29,6 +31,31 @@ return [
                 ]
             ),
             'description' => 'Performs a cleanup after running tests.',
+        ],
+        'phar' => [
+            'task' => new \Konstrui\Task\PharTask(
+                sprintf('konstrui-%s.phar', $version->getVersion()),
+                [
+                    __DIR__ . '/src/',
+                    __DIR__ . '/vendor/',
+                    __DIR__ . '/autoload.php',
+                    __DIR__ . '/runner.php',
+                ],
+                __DIR__,
+                <<<STUB
+#!/usr/bin/env php
+<?php
+
+Phar::mapPhar('konstrui-{$version->getVersion()}.phar');
+
+require 'phar://konstrui-{$version->getVersion()}.phar/runner.php';
+
+__HALT_COMPILER();
+STUB
+            ),
+            'dependencies' => [
+                'composer',
+            ],
         ],
     ],
 ];

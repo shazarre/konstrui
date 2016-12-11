@@ -111,7 +111,7 @@ new CallableTask(function () {
 // a TaskExecutionException will be thrown at runtime
 new CallableTask(function () {
     return false;
-})
+});
 ```
 
 ##### CleanTask
@@ -170,7 +170,7 @@ Currently supports 2 composer commands:
 - install (`\Konstrui\Task\ComposerTask::MODE_INSTALL`)
 - update (`\Konstrui\Task\ComposerTask::MODE_UPDATE`)
 
-Specifying any other mode will throw a `TaskCreateException`.
+Specifying any other mode will throw a `TaskCreationException`.
 
 Supports also:
 - including/excluding dev dependencies
@@ -184,4 +184,47 @@ $task = new \Konstrui\Task\ComposerTask(
     true // it means it will install dev dependencies
 );
 
+```
+
+#### PharTask
+
+Creates a Phar file.
+
+Keep in mind that php setting `phar.readonly` needs to be disabled (by default it's enabled).
+
+```php
+<?php
+$task = new \Konstrui\Task\PharTask(
+    'application.phar', // path where archive should be created, mandatory
+     // array of paths which should be included into archive, mandatory
+    [
+        __DIR__ . '/src/',
+        __DIR__ . '/vendor/',
+    ],
+    /*
+     * Base path which will be removed from local phar path, so
+     * for example: "/tmp/phar/test.php" with base path "/tmp/phar"
+     * would become "test.php" inside the archive.
+     * 
+     * This param is not mandatory and can be ommited.  
+     * 
+     * @see http://php.net/manual/en/phar.addfile.php
+     */
+    __DIR__,
+    /*
+     * Stub for the phar file, not mandatory
+     * 
+     * @see http://php.net/manual/en/phar.setstub.php
+     */
+    <<<STUB
+#!/usr/bin/env php
+<?php
+
+Phar::mapPhar('application.phar');
+
+require 'phar://application.phar/index.php';
+
+__HALT_COMPILER();
+STUB
+);
 ```

@@ -95,7 +95,7 @@ class ComposerTaskUnitTest extends \PHPUnit_Framework_TestCase
     }
 
     /**
-     * @expectedException \Konstrui\Exception\TaskCreateException
+     * @expectedException \Konstrui\Exception\TaskCreationException
      */
     public function testThrowsExceptionWhenInvalidModeProvided()
     {
