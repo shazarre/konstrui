@@ -1,6 +1,14 @@
 {
   "name": "shazarre/konstrui",
   "description": "A build system in PHP.",
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Leszek Stachowski",
+      "email": "leszek@stachowski.me",
+      "role": "Developer"
+    }
+  ],
   "autoload": {
     "psr-4": {
       "Konstrui\\": "src/Konstrui/"
