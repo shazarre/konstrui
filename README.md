@@ -38,7 +38,8 @@ there.
 
 ## Usage
 
-`./vendor/bin/konstrui <task|command> [arguments]`
+    ./vendor/bin/konstrui <task|command> [arguments]
+
 ### Commands
 
 Commands in Knstrui are prefixed with `--` and their list
