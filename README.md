@@ -55,7 +55,7 @@ is predefined. Available commands are:
 
 #### Build file
 
-To use tasks, your project needs to include a `.kontrui.php`. Below you can find an example
+To use tasks, your project needs to include a `.konstrui.php`. Below you can find an example
 contents of such file.
 
 ```php
