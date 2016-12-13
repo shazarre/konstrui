@@ -42,7 +42,7 @@ there.
 
 ### Commands
 
-Commands in Knstrui are prefixed with `--` and their list
+Commands in Konstrui are prefixed with `--` and their list
 is predefined. Available commands are:
 
 | Command        | Description           |
@@ -233,4 +233,19 @@ require 'phar://application.phar/index.php';
 __HALT_COMPILER();
 STUB
 );
+```
+
+#### ReadFileTask
+
+Reads contents of specified file.
+
+Will throw an exception if the given path:
+- does not exist
+- is a directory
+- is not readable
+
+```php
+<?php
+
+$task = new ReadFileTask(__DIR__ . '/file-to-read.txt');
 ```

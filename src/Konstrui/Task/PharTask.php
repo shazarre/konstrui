@@ -65,7 +65,7 @@ class PharTask implements TaskInterface, LoggableInterface
     }
 
     /**
-     * @inheritdoc
+     * {@inheritdoc}
      */
     public function perform()
     {
