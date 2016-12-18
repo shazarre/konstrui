@@ -6,6 +6,7 @@ use Konstrui\Exception\TaskExecutionException;
 use Konstrui\Logger\LoggableInterface;
 use Konstrui\Logger\LoggingTrait;
 
+// TODO should accepts also wildcard patterns
 class CleanTask implements TaskInterface, LoggableInterface
 {
     use LoggingTrait;

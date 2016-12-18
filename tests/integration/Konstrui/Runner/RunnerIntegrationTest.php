@@ -6,10 +6,15 @@ use Konstrui\Definition\Definition;
 use Konstrui\Exception\TaskExecutionException;
 use Konstrui\Logger\LoggableInterface;
 use Konstrui\Logger\LoggerInterface;
+use Konstrui\Definition\Provider\PhpProvider;
 use Konstrui\Resolver\Resolver;
+use Konstrui\Task\CompoundTask;
+use Konstrui\Task\CreateFileTask;
 use Konstrui\Task\ExecutableTask;
+use Konstrui\Task\ReadFileTask;
 use Konstrui\Task\TaskAlias;
 use Konstrui\Task\TaskInterface;
+use Konstrui\Task\WriteFileTask;
 
 /**
  * Class RunnerIntegrationTest.
@@ -137,5 +142,49 @@ class RunnerIntegrationTest extends \PHPUnit_Framework_TestCase
             $this->getMockForAbstractClass(LoggerInterface::class)
         );
         $this->assertFalse($runner->run(new TaskAlias('a')));
+    }
+
+    public function testPassesOutputAsInputToNextTask()
+    {
+        $expectedContent = "Test content of file\n";
+        file_put_contents('/tmp/runner-test-read.txt', $expectedContent);
+        $provider = new PhpProvider(
+            [
+                'tasks' => [
+                    'create' => [
+                        'task' => new CreateFileTask(
+                            '/tmp/runner-test-write.txt',
+                            CreateFileTask::SKIP_EXISTING_PATH
+                        ),
+                    ],
+                    'read' => [
+                        'task' => new ReadFileTask('/tmp/runner-test-read.txt'),
+                    ],
+                    'write' => [
+                        'task' => new WriteFileTask('/tmp/runner-test-write.txt'),
+                    ],
+                    'file-pipeline' => [
+                        'task' => new CompoundTask(
+                            [
+                                'create',
+                                'read',
+                                'write',
+                            ]
+                        ),
+                    ],
+                ],
+            ]
+        );
+        $runner = new Runner(
+            new Resolver($provider->provideDefinition()),
+            $this->getMockForAbstractClass(LoggerInterface::class)
+        );
+        $runner->run(new TaskAlias('file-pipeline'));
+        $this->assertEquals(
+            $expectedContent,
+            file_get_contents('/tmp/runner-test-write.txt')
+        );
+        unlink('/tmp/runner-test-write.txt');
+        unlink('/tmp/runner-test-read.txt');
     }
 }

@@ -22,6 +22,16 @@ return [
             ],
             'description' => 'Runs unit and integration tests.',
         ],
+        'code-fixer' => [
+            'task' => new \Konstrui\Task\ExecutableTask(
+                './vendor/bin/php-cs-fixer fix',
+                \Konstrui\Task\ExecutableTask::IGNORE_EXIT_CODE
+            ),
+            'dependencies' => [
+                'composer-dev',
+            ],
+            'description' => 'Runs PHP CS Fixer.',
+        ],
         'cleanup' => [
             'task' => new \Konstrui\Task\CleanTask(
                 [
@@ -56,6 +66,14 @@ STUB
             'dependencies' => [
                 'composer',
             ],
+        ],
+        'quality' => [
+            'task' => new \Konstrui\Task\CompoundTask(
+                [
+                    'code-fixer',
+                    'tests',
+                ]
+            ),
         ],
     ],
 ];

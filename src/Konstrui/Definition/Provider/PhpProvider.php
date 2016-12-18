@@ -5,6 +5,7 @@ namespace Konstrui\Definition\Provider;
 use Konstrui\Definition\Definition;
 use Konstrui\Exception\InvalidSchemaException;
 use Konstrui\Task\TaskAlias;
+use Konstrui\Task\CompoundTaskInterface;
 
 /**
  * A PHP definition provider. Requires a '.konstrui.php' file returning an array
@@ -62,6 +63,15 @@ class PhpProvider implements ProviderInterface
                 }
 
                 $definition->addTask(new TaskAlias($alias), $schema['task']);
+
+                if ($schema['task'] instanceof CompoundTaskInterface) {
+                    foreach ($schema['task']->getTaskAliases() as $compoundTaskAlias) {
+                        $definition->addDependency(
+                            new TaskAlias($alias),
+                            new TaskAlias($compoundTaskAlias)
+                        );
+                    }
+                }
 
                 if (array_key_exists('dependencies', $schema)) {
                     foreach ($schema['dependencies'] as $dependency) {

@@ -107,15 +107,13 @@ will be thrown and build process will stop at this point.
 ```php
 <?php
 
-use Konstrui\Task\CallableTask;
-
 // will just output "I was called!" string at runtime
-new CallableTask(function () {
+new \Konstrui\Task\CallableTask(function () {
     echo "I was called!";
 });
 
 // a TaskExecutionException will be thrown at runtime
-new CallableTask(function () {
+new \Konstrui\Task\CallableTask(function () {
     return false;
 });
 ```
@@ -131,7 +129,7 @@ stop.
 <?php
 
 // will remove specified folder and file
-$cleanupTask = new CleanTask(
+$cleanupTask = new \Konstrui\Task\CleanTask(
     [
         '/tmp/artifacts-folder/',
         '/tmp/artifacts-file.txt',
@@ -142,12 +140,20 @@ $cleanupTask = new CleanTask(
 ##### ExecutableTask
 
 Will run specified command. If running the command will result in exit code
-greater than 0, it will throw `TaskExecutionException` and the build will stop.
+greater than 0, it will throw `TaskExecutionException` and the build will stop
+(unless you specify `\Konstrui\Task\ExecutableTask::IGNORE_EXIT_CODE`).
 
 ```php
 <?php
 
-$executableTask = new ExecutableTask('ps aux');
+// Will throw exception when process returns exit code > 0
+$executableTask = new \Konstrui\Task\ExecutableTask('ps aux');
+
+// Will not throw exception when process returns exit code > 0
+$executableTask = new \Konstrui\Task\ExecutableTask(
+    'ps aux',
+    \Konstrui\Task\ExecutableTask::IGNORE_EXIT_CODE
+);
 ```
 
 ##### PhpUnitTask
@@ -244,8 +250,74 @@ Will throw an exception if the given path:
 - is a directory
 - is not readable
 
+Produces output (file contents) which will be passed an input to next task.
+
 ```php
 <?php
 
-$task = new ReadFileTask(__DIR__ . '/file-to-read.txt');
+$task = new \Konstrui\Task\ReadFileTask(__DIR__ . '/file-to-read.txt');
+```
+
+#### WriteFileTask
+
+Write contents to specified file.
+
+Will throw an exception if the given path:
+- does not exist
+- is a directory
+- is not writable
+
+Will also throw an exception in case when neither input nor via constructor
+is specified.
+
+Keep in mind that input has precedence over constructor contents param. If there will
+be both specified, input will be written and the param ignored.
+
+```php
+<?php
+
+// Directly declare contents
+$task = new \Konstrui\Task\WriteFileTask(
+    __DIR__ . '/file-to-write.txt',
+    "File contents\n"
+);
+
+// Task will use input
+$task = new \Konstrui\Task\WriteFileTask(__DIR__ . '/file-to-write.txt');
+```
+
+#### CreateFileTask
+
+Creates a file.
+
+Will throw an exception if path already exists (unless you specify `\Konstrui\Task\CreateFileTask::SKIP_EXISTING_PATH`).
+
+Will also throw an exception in case file could not be created.
+
+```php
+<?php
+
+// Will throw exception when path already exists
+$task = new \Konstrui\Task\CreateFileTask(__DIR__ . '/file-to-create.txt');
+
+// Will not throw exception when path already exists
+$task = new \Konstrui\Task\CreateFileTask(
+    __DIR__ . '/file-to-create.txt',
+    \Konstrui\Task\CreateFileTask::SKIP_EXISTING_PATH
+);
+```
+
+#### CompoundTask
+
+Allows grouping of tasks. Does not perform any action on its own.
+
+```php
+<?php
+
+$task = new \Konstrui\Task\CompoundTask(
+    [
+        'task-alias',
+        'another-task-alias',
+    ]
+);
 ```
