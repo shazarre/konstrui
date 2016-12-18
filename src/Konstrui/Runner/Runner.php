@@ -7,6 +7,9 @@ use Konstrui\Logger\LoggerInterface;
 use Konstrui\Resolver\ResolverInterface;
 use Konstrui\Exception\TaskExecutionException;
 use Konstrui\Task\TaskAlias;
+use Konstrui\Task\IO\HasOutputInterface;
+use Konstrui\Task\IO\AcceptsInputInterface;
+use Konstrui\Task\TaskInterface;
 
 class Runner implements RunnerInterface
 {
@@ -26,6 +29,9 @@ class Runner implements RunnerInterface
      * @var LoggerInterface
      */
     protected $logger;
+
+    /** @var mixed */
+    protected $lastTaskOutput;
 
     /**
      * Runner constructor.
@@ -55,6 +61,8 @@ class Runner implements RunnerInterface
 
         $this->addToExecutionStack($alias);
 
+        $this->logger->log(sprintf('Starting task %s', $alias));
+
         foreach ($this->resolver->getDependencies($alias) as $dependency) {
             if (!in_array($dependency, $this->completed)) {
                 if (!$this->run($dependency)) {
@@ -65,7 +73,6 @@ class Runner implements RunnerInterface
 
         $this->setLoggerPrefix();
 
-        $this->logger->log(sprintf('Starting task %s', $alias));
         $task = $this->resolver->getTask($alias);
 
         if ($task instanceof LoggableInterface) {
@@ -73,7 +80,14 @@ class Runner implements RunnerInterface
         }
 
         try {
+            if ($this->lastTaskOutput !== null
+                && $task instanceof AcceptsInputInterface
+            ) {
+                $task->setInput($this->lastTaskOutput);
+            }
+
             $task->perform();
+            $this->determineLastOutput($task);
             $this->logger->log('Task finished successfully');
         } catch (TaskExecutionException $e) {
             $this->logger->log(
@@ -129,5 +143,19 @@ class Runner implements RunnerInterface
     protected function addToExecutionStack(TaskAlias $alias)
     {
         return array_push($this->executionStack, $alias->getAlias());
+    }
+
+    /**
+     * @param $task
+     */
+    protected function determineLastOutput(TaskInterface $task)
+    {
+        if ($task instanceof HasOutputInterface) {
+            $this->lastTaskOutput = $task->getOutput();
+
+            return;
+        }
+
+        $this->lastTaskOutput = null;
     }
 }

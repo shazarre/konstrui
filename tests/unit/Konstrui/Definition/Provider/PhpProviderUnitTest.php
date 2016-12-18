@@ -3,6 +3,7 @@
 namespace Konstrui\Definition\Provider;
 
 use Konstrui\Definition\Definition;
+use Konstrui\Task\CompoundTaskInterface;
 use Konstrui\Task\TaskAlias;
 use Konstrui\Task\TaskInterface;
 
@@ -95,5 +96,93 @@ class PhpProviderUnitTest extends \PHPUnit_Framework_TestCase
                 },
             ],
         ];
+    }
+
+    public function testProvideDefinitionWithCompoundTask()
+    {
+        /** @var CompoundTaskInterface|PHPUnit_Framework_MockObject_MockObject */
+        $compoundTask = $this->getMockForAbstractClass(
+            CompoundTaskInterface::class
+        );
+        $compoundTask->expects($this->once())
+            ->method('getTaskAliases')
+            ->willReturn(
+                [
+                    'compound-task-alias',
+                    'another-compound-task-alias',
+                ]
+            );
+        $expectedDefinition = new Definition();
+        $expectedDefinition->addTask(
+            new TaskAlias('compound-task-alias'),
+            $this->getMockForAbstractClass(TaskInterface::class)
+        );
+        $expectedDefinition->addTask(
+            new TaskAlias('another-compound-task-alias'),
+            $this->getMockForAbstractClass(TaskInterface::class)
+        );
+        $expectedDefinition->addTask(new TaskAlias('compound'), $compoundTask);
+        $expectedDefinition->addDependency(
+            new TaskAlias('compound'),
+            new TaskAlias('compound-task-alias')
+        );
+        $expectedDefinition->addDependency(
+            new TaskAlias('compound'),
+            new TaskAlias('another-compound-task-alias')
+        );
+        $provider = new PhpProvider(
+            [
+                'tasks' => [
+                    'compound-task-alias' => [
+                        'task' => $this->getMockForAbstractClass(
+                           TaskInterface::class
+                        ),
+                    ],
+                    'another-compound-task-alias' => [
+                        'task' => $this->getMockForAbstractClass(
+                            TaskInterface::class
+                        ),
+                    ],
+                    'compound' => [
+                        'task' => $compoundTask,
+                    ],
+                ],
+            ]
+        );
+        $this->assertEquals($expectedDefinition, $provider->provideDefinition());
+    }
+
+    /**
+     * @expectedException \Konstrui\Exception\TaskNotFoundException
+     */
+    public function testThrowsExceptionOnNonExisitingCompoundTask()
+    {
+        /** @var CompoundTaskInterface|PHPUnit_Framework_MockObject_MockObject */
+        $compoundTask = $this->getMockForAbstractClass(
+            CompoundTaskInterface::class
+        );
+        $compoundTask->expects($this->once())
+            ->method('getTaskAliases')
+            ->willReturn(
+                [
+                    'compound-task-alias',
+                    'another-compound-task-alias',
+                ]
+            );
+        $provider = new PhpProvider(
+            [
+                'tasks' => [
+                    'compound-task-alias' => [
+                        'task' => $this->getMockForAbstractClass(
+                           TaskInterface::class
+                        ),
+                    ],
+                    'compound' => [
+                        'task' => $compoundTask,
+                    ],
+                ],
+            ]
+        );
+        $provider->provideDefinition();
     }
 }

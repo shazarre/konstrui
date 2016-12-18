@@ -4,8 +4,10 @@ namespace Konstrui\Task;
 
 use Konstrui\Exception\TaskExecutionException;
 
-class CallableTask implements TaskInterface
+class CallableTask implements TaskInterface, IO\AcceptsInputInterface, IO\HasOutputInterface
 {
+    use IO\AcceptsInputTrait, IO\HasOutputTrait;
+
     /**
      * @var callable
      */
@@ -23,9 +25,12 @@ class CallableTask implements TaskInterface
     public function perform()
     {
         $callback = $this->callback;
+        $callbackResult = $callback($this->getInput());
 
-        if ($callback() === false) {
+        if ($callbackResult === false) {
             throw new TaskExecutionException('Given callback evaluated to false');
         }
+
+        $this->setOutput($callbackResult);
     }
 }

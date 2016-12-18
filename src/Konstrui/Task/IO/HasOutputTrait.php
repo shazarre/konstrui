@@ -11,6 +11,14 @@ trait HasOutputTrait
     protected $output;
 
     /**
+     * @return mixed
+     */
+    public function getOutput()
+    {
+        return $this->output;
+    }
+
+    /**
      * Internal setter for output.
      *
      * @param mixed $output
@@ -18,13 +26,5 @@ trait HasOutputTrait
     protected function setOutput($output)
     {
         $this->output = $output;
-    }
-
-    /**
-     * @return mixed
-     */
-    public function getOutput()
-    {
-        return $this->output;
     }
 }
