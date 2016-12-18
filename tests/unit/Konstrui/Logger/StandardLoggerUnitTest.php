@@ -2,11 +2,23 @@
 
 namespace Konstrui\Logger;
 
+use Colors\Color;
+
 class StandardLoggerUnitTest extends \PHPUnit_Framework_TestCase
 {
     public function testSetPrefix()
     {
-        $this->expectOutputString("INFO: prefix > test log message\n");
+        $prefix = new Color('prefix > ');
+        $prefix = $prefix->fg('green');
+        $logMessage = new Color('test log message');
+        $logMessage = $logMessage->fg('green');
+        $this->expectOutputString(
+            sprintf(
+                "INFO: %s%s\n",
+                $prefix,
+                $logMessage
+            )
+        );
         $logger = new StandardLogger();
         $logger->setPrefix('prefix > ');
         $logger->log('test log message');
@@ -17,12 +29,16 @@ class StandardLoggerUnitTest extends \PHPUnit_Framework_TestCase
      * @param int $monologLogLevel
      * @dataProvider dataResolvesMonologLogLevel
      */
-    public function testMapsLogLevelToReadableName($logLevel, $expectedPrefix)
-    {
+    public function testMapsLogLevelToReadableName(
+        $logLevel,
+        $expectedPrefix,
+        callable $colorizeCallback
+    ) {
         $this->expectOutputString(
             sprintf(
-                "%s: test log message\n",
-                $expectedPrefix
+                "%s: %s\n",
+                $expectedPrefix,
+                $colorizeCallback("test log message")
             )
         );
         $logger = new StandardLogger();
@@ -38,22 +54,45 @@ class StandardLoggerUnitTest extends \PHPUnit_Framework_TestCase
             'debug' => [
                 LoggerInterface::LEVEL_DEBUG,
                 'DEBUG',
+                function ($text) {
+                    return $text;
+                },
             ],
             'info' => [
                 LoggerInterface::LEVEL_INFO,
                 'INFO',
+                function ($text) {
+                    $color = new Color($text);
+
+                    return $color->fg('green');
+                },
             ],
             'warning' => [
                 LoggerInterface::LEVEL_WARNING,
                 'WARNING',
+                function ($text) {
+                    $color = new Color($text);
+
+                    return $color->fg('yellow');
+                },
             ],
             'error' => [
                 LoggerInterface::LEVEL_ERROR,
                 'ERROR',
+                function ($text) {
+                    $color = new Color($text);
+
+                    return $color->bg('red')->fg('white');
+                },
             ],
             'default' => [
                 -1,
                 'INFO',
+                function ($text) {
+                    $color = new Color($text);
+
+                    return $color->fg('green');
+                },
             ],
         ];
     }

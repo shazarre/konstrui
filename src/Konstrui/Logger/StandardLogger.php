@@ -2,6 +2,8 @@
 
 namespace Konstrui\Logger;
 
+use Colors\Color;
+
 class StandardLogger implements LoggerInterface
 {
     const LOG_LEVEL_NAME_DEBUG = 'DEBUG';
@@ -20,12 +22,36 @@ class StandardLogger implements LoggerInterface
      */
     public function log($message, $level = self::LEVEL_INFO)
     {
+        $mappedLevelName = $this->mapLevelToReadableName($level);
         echo sprintf(
             "%s: %s%s\n",
-            $this->mapLevelToReadableName($level),
-            $this->prefix,
-            trim($message)
+            $mappedLevelName,
+            $this->colorize($mappedLevelName, $this->prefix),
+            $this->colorize($mappedLevelName, trim($message))
         );
+    }
+
+    /**
+     * @param $level
+     * @param $text
+     */
+    protected function colorize($level, $text)
+    {
+        if (empty($text)) {
+            return $text;
+        }
+        
+        $color = new Color($text);
+        switch ($level) {
+            case self::LOG_LEVEL_NAME_INFO:
+                return $color->fg('green');
+            case self::LOG_LEVEL_NAME_WARNING:
+                return $color->fg('yellow');
+            case self::LOG_LEVEL_NAME_ERROR:
+                return $color->bg('red')->fg('white');
+        }
+
+        return $text;
     }
 
     /**
