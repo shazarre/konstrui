@@ -40,7 +40,7 @@ class ExecutableTask implements TaskInterface, LoggableInterface
         if ($exitCode) {
             $message = sprintf('Process exited with code %d', $exitCode);
             if ($this->ignoreExitCode === self::IGNORE_EXIT_CODE) {
-                $this->log($message, LoggerInterface::LEVEL_DEBUG);
+                $this->log($message, LoggerInterface::LEVEL_WARNING);
 
                 return;
             }
@@ -66,7 +66,7 @@ class ExecutableTask implements TaskInterface, LoggableInterface
 
         if (is_resource($process)) {
             while (($line = fgets($pipes[1])) || ($line = fgets($pipes[2]))) {
-                $this->log($line);
+                $this->log($line, LoggerInterface::LEVEL_DEBUG);
             }
         }
 
