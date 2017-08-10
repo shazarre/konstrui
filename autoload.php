@@ -9,6 +9,7 @@ $autoloadLookupPaths = [
     __DIR__ . '/vendor/autoload.php',
     __DIR__ . '/../vendor/autoload.php',
     __DIR__ . '/../../vendor/autoload.php',
+    __DIR__ . '/../../../vendor/autoload.php',
 ];
 
 foreach ($autoloadLookupPaths as $path) {

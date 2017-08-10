@@ -8,7 +8,7 @@ namespace Konstrui;
 class Version
 {
     /** @var string * */
-    protected $version = '0.4.0';
+    protected $version = '0.4.1';
 
     /**
      * Returns current version of Konstrui.
